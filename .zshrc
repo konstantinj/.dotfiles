@@ -33,8 +33,8 @@ POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="007"
 POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="012"
 
 zsh_custom_aws() {
-#  echo -n $AWS_DEFAULT_PROFILE | awk '{print substr($1,1,3)"..."substr($1,length($1)-2)}'
-  echo -n $AWS_DEFAULT_PROFILE
+    #  echo -n $AWS_DEFAULT_PROFILE | awk '{print substr($1,1,3)"..."substr($1,length($1)-2)}'
+    echo -n $AWS_DEFAULT_PROFILE
 }
 
 POWERLEVEL9K_CUSTOM_AWS="zsh_custom_aws"
@@ -42,12 +42,14 @@ POWERLEVEL9K_CUSTOM_AWS_FOREGROUND="007"
 POWERLEVEL9K_CUSTOM_AWS_BACKGROUND="166"
 
 zsh_custom_docker() {
-  if [[ -z "$DOCKER_HOST" ]]; then
-    return;
-  fi
-  echo -n \
-  $(echo -n $DOCKER_HOST | awk '{print substr($1,7,length($1)-11)}') \
-  $(docker version | awk 'FNR==2{printf $2}FNR==10{print "/"$2}')
+    if [[ -z "$DOCKER_HOST" ]]; then
+        echo -n \
+            $(docker version | awk 'FNR==2{printf $2}FNR==10{print "/"$2}')
+        return;
+    fi
+    echo -n \
+        $(echo -n $DOCKER_HOST | awk '{print substr($1,7,length($1)-11)}') \
+        $(docker version | awk 'FNR==2{printf $2}FNR==10{print "/"$2}')
 }
 
 POWERLEVEL9K_CUSTOM_DOCKER="zsh_custom_docker"
@@ -60,7 +62,7 @@ POWERLEVEL9K_CUSTOM_DOCKER_BACKGROUND="052"
 
 # ~ is sometimes not working for me on osx
 export PATH="./vendor:$HOME/bin:$HOME/tools/rsp/docker-experiments:$HOME/.composer/vendor/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
-export ZSH=~/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 CASE_SENSITIVE="true"
 # ENABLE_CORRECTION="true"
@@ -70,30 +72,33 @@ HIST_STAMPS="yyyy-mm-dd"
 
 # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins
 plugins=( \
-  aws \
-  branch \
-  brew \
-  composer \
-  docker \
-  docker-compose \
-  git \
-  git-flow \
-  git-hubflow \
-  git-extras \
-  git-remote-branch \
-  github \
-  go \
-  golang \
-  grunt \
-  iwhois \
-  jira \
-  jsontools \
-  knife \
-  kitchen \
-  vundle \
-)
+    aws \
+    branch \
+    brew \
+    composer \
+    docker \
+    docker-compose \
+    git \
+    git-flow \
+    git-hubflow \
+    git-extras \
+    git-remote-branch \
+    github \
+    go \
+    golang \
+    grunt \
+    iwhois \
+    jira \
+    jsontools \
+    knife \
+    kitchen \
+    vundle \
+    )
 
-source $ZSH/oh-my-zsh.sh
+if [ -f $ZSH/oh-my-zsh.sh ]; then
+    source $ZSH/oh-my-zsh.sh
+fi
+
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
@@ -158,24 +163,29 @@ alias .5='cd ../../../../..'
 # Colorize the ls output
 alias ls='ls -ahlG'
 
+# Reload .zshrc
+alias rz="source $HOME/.zshrc"
+
 # --------------------
 #   DOCKER ALIASES
 # --------------------
 
 # include docker version manager
-source ~/.dvm/dvm.sh
+if [ -f $HOME/.dvm/dvm.sh ]; then
+    source $HOME/.dvm/dvm.sh
+fi
 
 load-docker-machine() {
-  eval $(docker-machine env default)
+eval $(docker-machine env default)
 }
 alias ldm="load-docker-machine"
 
 load-docker-qnap() {
-  export DOCKER_TLS_VERIFY="1"
-  export DOCKER_HOST="tcp://192.168.1.100:2376"
-  export DOCKER_CERT_PATH="$HOME/.docker/qnap"
-  export DOCKER_MACHINE_NAME=""
-  dvm use 1.9.1
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.1.100:2376"
+export DOCKER_CERT_PATH="$HOME/.docker/qnap"
+export DOCKER_MACHINE_NAME=""
+dvm use 1.9.1
 }
 
 # Get latest container ID
@@ -183,9 +193,9 @@ alias dl="docker ps -l -q"
 # Get container processes
 alias dps="docker ps"
 # Get container processes for smaller screens
-alias dpsf="docker ps --format \"table {{.Names}}\t{{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Command}}\t{{.Ports}}\" | tail -n +2 | sort"
+alias dpsf="docker ps --size --format \"table {{.Names}}\t{{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Command}}\t{{.Ports}}\" | tail -n +2 | sort"
 # Get process included stop container
-alias dpa="docker ps -a"
+alias dpa="docker ps --size -a"
 # Get images
 alias di="docker images"
 # Get container IP
@@ -217,9 +227,9 @@ alias dclear="drm; drv; dri;"
 alias dclean="drmf; drvf; drif;"
 # Dockerfile build, e.g., $dbu image/name, without image it name takes current folder name
 dbu() {
-  d=${PWD##*/}
-  n=${1:-$d}
-  docker build -t="$n" .
+    d=${PWD##*/}
+    n=${1:-$d}
+    docker build -t="$n" .
 }
 
 alias ddu="disk-usage"
@@ -237,15 +247,13 @@ dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/[
 # --------------------
 
 load-aws-gg-production() { export AWS_DEFAULT_PROFILE=gg-production }
-load-aws-ps-playground() { export AWS_DEFAULT_PROFILE=ps-playground }
-
-load-aws-docker-ps-playground() {
-  login=$(aws ecr get-login)
-  export aws_ecr_host=$(echo $login | grep -o "https.*")
-  eval $login
-  dvm use 1.9.1
-  echo "aws_ecr_host: $aws_ecr_host"
-  load-aws-ps-playground
+load-aws-ps-playground() {
+export AWS_DEFAULT_PROFILE=ps-playground
+login=$(aws ecr get-login --region eu-west-1)
+export aws_ecr_host=$(echo $login | grep -o "https.*")
+eval $login
+# dvm use 1.9.1
+echo "aws_ecr_host: $aws_ecr_host"
 }
 
 # --------------------
