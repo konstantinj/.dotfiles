@@ -2,11 +2,13 @@
 
 ## Installation
 
-- clone [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)
-- clone [docker version manager](https://github.com/getcarina/dvm)
-- clone [vundle](https://github.com/VundleVim/Vundle.vim)
-- clone this repo somewhere
-- run install.sh
+- install zsh
+- sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+- git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+- curl -sL https://download.getcarina.com/dvm/latest/install.sh | sh
+- git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+- git clone https://github.com/konstantinj/.dotfiles.git
+- cd .dotfiles && ./install.sh
 
 ## What's included?
 
