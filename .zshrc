@@ -33,8 +33,7 @@ POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="007"
 POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="012"
 
 zsh_custom_aws() {
-    #  echo -n $AWS_DEFAULT_PROFILE | awk '{print substr($1,1,3)"..."substr($1,length($1)-2)}'
-    echo -n $AWS_DEFAULT_PROFILE
+    echo -n "$AWS_DEFAULT_PROFILE/$AWS_DEFAULT_REGION"
 }
 
 POWERLEVEL9K_CUSTOM_AWS="zsh_custom_aws"
@@ -43,8 +42,11 @@ POWERLEVEL9K_CUSTOM_AWS_BACKGROUND="166"
 
 zsh_custom_docker() {
     if [[ -z "$DOCKER_HOST" ]]; then
-        echo -n \
-            $(docker version | awk 'FNR==2{printf $2}FNR==10{print "/"$2}')
+        if pgrep "com.docker.hyperkit" > /dev/null
+        then
+            echo -n \
+                $(docker version | awk 'FNR==2{printf $2}FNR==10{print "/"$2}')
+        fi
         return;
     fi
     echo -n \
@@ -61,7 +63,7 @@ POWERLEVEL9K_CUSTOM_DOCKER_BACKGROUND="052"
 # --------------------
 
 # ~ is sometimes not working for me on osx
-export PATH="./vendor:$HOME/bin:$HOME/tools/rsp/docker-experiments:$HOME/.composer/vendor/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
+export PATH="./vendor:$HOME/bin:/usr/local/Cellar/grep/2.25/bin:$HOME/tools/rsp/docker-experiments:$HOME/.composer/vendor/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
 export ZSH=$HOME/.oh-my-zsh
 
 CASE_SENSITIVE="true"
@@ -185,7 +187,14 @@ export DOCKER_TLS_VERIFY="1"
 export DOCKER_HOST="tcp://192.168.1.100:2376"
 export DOCKER_CERT_PATH="$HOME/.docker/qnap"
 export DOCKER_MACHINE_NAME=""
-dvm use 1.9.1
+dvm use 1.10.2
+}
+
+load-docker-k86eu() {
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://k86.eu:2376"
+export DOCKER_CERT_PATH="$HOME/.docker/k86.eu"
+export DOCKER_MACHINE_NAME=""
 }
 
 # Get latest container ID
@@ -246,15 +255,24 @@ dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/[
 #   AWS ALIASES
 # --------------------
 
-load-aws-gg-production() { export AWS_DEFAULT_PROFILE=gg-production }
-load-aws-ps-playground() {
-export AWS_DEFAULT_PROFILE=ps-playground
+load-aws-master-ggs() { 
+export AWS_DEFAULT_PROFILE=master-ggs
+export AWS_DEFAULT_REGION=eu-west-1
+}
+load-aws-ps-ggs() {
+export AWS_DEFAULT_PROFILE=ps-ggs
+export AWS_DEFAULT_REGION=eu-west-1
 login=$(aws ecr get-login --region eu-west-1)
 export aws_ecr_host=$(echo $login | grep -o "https.*")
 eval $login
-# dvm use 1.9.1
 echo "aws_ecr_host: $aws_ecr_host"
 }
+
+set-aws-region-eu-west-1() { export AWS_DEFAULT_REGION=eu-west-1 }
+set-aws-region-us-east-1 (){ export AWS_DEFAULT_REGION=eu-east-1 }
+set-aws-region-ap-southeast-1() { export AWS_DEFAULT_REGION=ap-southeast-1 }
+set-aws-region-us-west-2() { export AWS_DEFAULT_REGION=us-west-2 }
+set-aws-region-ps-test() { set-aws-region-us-west-2 }
 
 # --------------------
 #   GIT ALIASES
@@ -263,6 +281,7 @@ echo "aws_ecr_host: $aws_ecr_host"
 alias gac='git add -A . && git commit -m' $1
 alias gpom='git push origin master'
 alias gpod='git push origin develop'
+alias gtf='git tag -l | xargs git tag -d && git fetch'
 alias ga='git add'
 alias gaa='git add .'
 alias gaaa='git add -A'
