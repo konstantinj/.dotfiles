@@ -63,7 +63,8 @@ POWERLEVEL9K_CUSTOM_DOCKER_BACKGROUND="052"
 # --------------------
 
 # ~ is sometimes not working for me on osx
-export PATH="./vendor:$HOME/bin:/usr/local/Cellar/grep/2.25/bin:$HOME/tools/rsp/docker-experiments:$HOME/.composer/vendor/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
+export PATH="./vendor:$HOME/bin:/usr/local/opt/coreutils/libexec/gnubin:$HOME/tools/rsp/docker-experiments:$HOME/.composer/vendor/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
+export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 export ZSH=$HOME/.oh-my-zsh
 
 CASE_SENSITIVE="true"
@@ -103,6 +104,11 @@ fi
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+
+export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/usr/local/share/zsh-syntax-highlighting/highlighters
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+fpath=(/usr/local/share/zsh-completions $fpath)
 
 # --------------------
 #   BINDS
@@ -269,7 +275,7 @@ echo "aws_ecr_host: $aws_ecr_host"
 }
 
 set-aws-region-eu-west-1() { export AWS_DEFAULT_REGION=eu-west-1 }
-set-aws-region-us-east-1 (){ export AWS_DEFAULT_REGION=eu-east-1 }
+set-aws-region-us-east-1 (){ export AWS_DEFAULT_REGION=us-east-1 }
 set-aws-region-ap-southeast-1() { export AWS_DEFAULT_REGION=ap-southeast-1 }
 set-aws-region-us-west-2() { export AWS_DEFAULT_REGION=us-west-2 }
 set-aws-region-ps-test() { set-aws-region-us-west-2 }
@@ -282,6 +288,7 @@ alias gac='git add -A . && git commit -m' $1
 alias gpom='git push origin master'
 alias gpod='git push origin develop'
 alias gtf='git tag -l | xargs git tag -d && git fetch'
+alias gt='git tag'
 alias ga='git add'
 alias gaa='git add .'
 alias gaaa='git add -A'

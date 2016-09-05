@@ -2,18 +2,25 @@
 
 ## Installation
 
-- install zsh
+- install zsh for your distribution
 - sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 - git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
 - curl -sL https://download.getcarina.com/dvm/latest/install.sh | sh
 - git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 - git clone https://github.com/konstantinj/.dotfiles.git
 - cd .dotfiles && ./install.sh
+- vim +PluginInstall +qall
+- for a better look & feel you'll need to install https://github.com/powerline/fonts
 
 ## What's included?
 
 Currently I've only included my .zshrc and my .vimrc.
 When running install.sh your current files will be backed up and links to the files in this repo will be created.
+
+## Screenshots
+
+![image of powerlevel9k](https://github.com/konstantinj/.dotfiles/blob/master/screenshot-powerlevel9k.png)
+![image of vim](https://github.com/konstantinj/.dotfiles/blob/master/screenshot-vim.png)
 
 ### .zshrc
 
