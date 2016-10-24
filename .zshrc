@@ -89,13 +89,10 @@ plugins=( \
     github \
     go \
     golang \
-    grunt \
     iwhois \
-    jira \
     jsontools \
-    knife \
-    kitchen \
     vundle \
+    ssh-agent \
     )
 
 if [ -f $ZSH/oh-my-zsh.sh ]; then
@@ -173,6 +170,12 @@ alias ls='ls -ahlG'
 
 # Reload .zshrc
 alias rz="source $HOME/.zshrc"
+
+# --------------------
+#   BREW ALIASES
+# --------------------
+
+alias buuc='brew update && brew upgrade && brew cleanup'
 
 # --------------------
 #   DOCKER ALIASES
@@ -313,6 +316,7 @@ alias gstl='git stash list'
 alias gstp='git stash pop'
 alias gstd='git stash drop'
 alias grsh='git reset --soft HEAD~${1:-1}'
+alias gpps='for ns in *; do echo "\t$ns" && cd $ns && for r in *; do echo "\t\t$r" && cd $r && git pull --recurse-submodules && cd ../; done; cd ../; done'
 
 # Show all alias related git
 galias() { alias | grep 'git' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
