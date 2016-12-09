@@ -33,7 +33,15 @@ POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="007"
 POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="012"
 
 zsh_custom_aws() {
-    echo -n "$AWS_DEFAULT_PROFILE/$AWS_DEFAULT_REGION"
+    if [ -n "$AWS_DEFAULT_PROFILE" ]; then
+        echo -n "$AWS_DEFAULT_PROFILE";
+    fi
+    if [ -n "$AWS_DEFAULT_REGION" ]; then
+        echo -n "/$AWS_DEFAULT_REGION";
+    fi
+    if [ -n "$ENVIRONMENT" ]; then
+        echo -n "/$ENVIRONMENT";
+    fi
 }
 
 POWERLEVEL9K_CUSTOM_AWS="zsh_custom_aws"
@@ -41,17 +49,7 @@ POWERLEVEL9K_CUSTOM_AWS_FOREGROUND="007"
 POWERLEVEL9K_CUSTOM_AWS_BACKGROUND="166"
 
 zsh_custom_docker() {
-    if [[ -z "$DOCKER_HOST" ]]; then
-        if pgrep "com.docker.hyperkit" > /dev/null
-        then
-            echo -n \
-                $(docker version | awk 'FNR==2{printf $2}FNR==10{print "/"$2}')
-        fi
-        return;
-    fi
-    echo -n \
-        $(echo -n $DOCKER_HOST | awk '{print substr($1,7,length($1)-11)}') \
-        $(docker version | awk 'FNR==2{printf $2}FNR==10{print "/"$2}')
+    echo -n $(docker version --format '{{.Client.Version}}/{{.Server.Version}}')
 }
 
 POWERLEVEL9K_CUSTOM_DOCKER="zsh_custom_docker"
@@ -89,13 +87,10 @@ plugins=( \
     github \
     go \
     golang \
-    grunt \
     iwhois \
-    jira \
     jsontools \
-    knife \
-    kitchen \
     vundle \
+    ssh-agent \
     )
 
 if [ -f $ZSH/oh-my-zsh.sh ]; then
@@ -173,6 +168,12 @@ alias ls='ls -ahlG'
 
 # Reload .zshrc
 alias rz="source $HOME/.zshrc"
+
+# --------------------
+#   BREW ALIASES
+# --------------------
+
+alias buuc='brew update && brew upgrade && brew cleanup'
 
 # --------------------
 #   DOCKER ALIASES
@@ -313,6 +314,7 @@ alias gstl='git stash list'
 alias gstp='git stash pop'
 alias gstd='git stash drop'
 alias grsh='git reset --soft HEAD~${1:-1}'
+alias gpps='for ns in *; do echo "\t$ns" && cd $ns && for r in *; do echo "\t\t$r" && cd $r && git pull && cd ../; done; cd ../; done'
 
 # Show all alias related git
 galias() { alias | grep 'git' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
