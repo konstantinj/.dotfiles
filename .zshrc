@@ -60,16 +60,31 @@ POWERLEVEL9K_CUSTOM_DOCKER_BACKGROUND="052"
 #   ZSH CONFIG
 # --------------------
 
-# ~ is sometimes not working for me on osx
-export PATH="./vendor:$HOME/bin:/usr/local/opt/coreutils/libexec/gnubin:$HOME/tools/rsp/docker-experiments:$HOME/.composer/vendor/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
-export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
-export ZSH=$HOME/.oh-my-zsh
+# Path to your oh-my-zsh installation.
+export ZSH=/Users/konstantin/.oh-my-zsh
 
 CASE_SENSITIVE="true"
+# HYPHEN_INSENSITIVE="true"
+# DISABLE_AUTO_UPDATE="true"
+# export UPDATE_ZSH_DAYS=13
+# DISABLE_LS_COLORS="true"
+# DISABLE_AUTO_TITLE="true"
 # ENABLE_CORRECTION="true"
 # COMPLETION_WAITING_DOTS="true"
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 HIST_STAMPS="yyyy-mm-dd"
+
+if [[ -n $SSH_CONNECTION ]]; then
+    export EDITOR='vim'
+else
+    export EDITOR='mvim'
+fi
+
+export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+export PATH="$HOME/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
+export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+export ZSH=$HOME/.oh-my-zsh
 
 # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins
 plugins=( \
@@ -80,10 +95,7 @@ plugins=( \
     docker \
     docker-compose \
     git \
-    git-flow \
-    git-hubflow \
     git-extras \
-    git-remote-branch \
     github \
     go \
     golang \
@@ -184,24 +196,12 @@ if [ -f $HOME/.dvm/dvm.sh ]; then
     source $HOME/.dvm/dvm.sh
 fi
 
-load-docker-machine() {
-eval $(docker-machine env default)
-}
-alias ldm="load-docker-machine"
-
 load-docker-qnap() {
 export DOCKER_TLS_VERIFY="1"
 export DOCKER_HOST="tcp://192.168.1.100:2376"
 export DOCKER_CERT_PATH="$HOME/.docker/qnap"
 export DOCKER_MACHINE_NAME=""
 dvm use 1.10.2
-}
-
-load-docker-k86eu() {
-export DOCKER_TLS_VERIFY="1"
-export DOCKER_HOST="tcp://k86.eu:2376"
-export DOCKER_CERT_PATH="$HOME/.docker/k86.eu"
-export DOCKER_MACHINE_NAME=""
 }
 
 # Get latest container ID
