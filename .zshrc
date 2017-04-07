@@ -82,14 +82,8 @@ CASE_SENSITIVE="true"
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 HIST_STAMPS="yyyy-mm-dd"
 
-if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR='vim'
-else
-    export EDITOR='mvim'
-fi
-
+export EDITOR='vim'
 export SSH_KEY_PATH="~/.ssh/rsa_id"
-
 export PATH="$HOME/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 export ZSH=$HOME/.oh-my-zsh
@@ -97,21 +91,16 @@ export ZSH=$HOME/.oh-my-zsh
 # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins
 plugins=( \
     aws \
-    branch \
     brew \
-    composer \
     docker \
     docker-compose \
     git \
     git-extras \
     github \
-    go \
-    golang \
-    iwhois \
-    jsontools \
-    vundle \
     ssh-agent \
-    )
+    zsh-syntax-highlighting \
+    zsh-completions \
+)
 
 if [ -f $ZSH/oh-my-zsh.sh ]; then
     source $ZSH/oh-my-zsh.sh
@@ -120,10 +109,9 @@ fi
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/usr/local/share/zsh-syntax-highlighting/highlighters
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-fpath=(/usr/local/share/zsh-completions $fpath)
+# export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/usr/local/share/zsh-syntax-highlighting/highlighters
+# source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# fpath=(/usr/local/share/zsh-completions $fpath)
 
 # --------------------
 #   BINDS
@@ -188,6 +176,8 @@ alias ls='ls -ahlG'
 
 # Reload .zshrc
 alias rz="source $HOME/.zshrc"
+
+# make(){/usr/local/bin/make "$@" 2>&1 | sed -u '/recipe for target/d'}
 
 # --------------------
 #   BREW ALIASES
@@ -270,17 +260,21 @@ dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/[
 #   AWS ALIASES
 # --------------------
 
-load-aws-master-ggs() { 
-export AWS_DEFAULT_PROFILE=master-ggs
-export AWS_DEFAULT_REGION=eu-west-1
+ecr-login() {
+	login=$(aws ecr get-login --region eu-west-1)
+	export aws_ecr_host=$(echo $login | grep -o "https.*")
+	eval $login
+	echo "aws_ecr_host: $aws_ecr_host"
 }
+
+load-aws-master-ggs() { 
+	export AWS_DEFAULT_PROFILE=master-ggs
+	export AWS_DEFAULT_REGION=eu-west-1
+}
+
 load-aws-ps-ggs() {
-export AWS_DEFAULT_PROFILE=ps-ggs
-export AWS_DEFAULT_REGION=eu-west-1
-login=$(aws ecr get-login --region eu-west-1)
-export aws_ecr_host=$(echo $login | grep -o "https.*")
-eval $login
-echo "aws_ecr_host: $aws_ecr_host"
+	export AWS_DEFAULT_PROFILE=ps-ggs
+	export AWS_DEFAULT_REGION=eu-west-1
 }
 
 set-aws-region-eu-west-1() { export AWS_DEFAULT_REGION=eu-west-1 }
