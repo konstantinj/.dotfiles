@@ -84,7 +84,7 @@ HIST_STAMPS="yyyy-mm-dd"
 
 export EDITOR='vim'
 export SSH_KEY_PATH="~/.ssh/rsa_id"
-export PATH="$HOME/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
+export PATH="$HOME/bin:/usr/local/opt/gettext/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 export ZSH=$HOME/.oh-my-zsh
 
@@ -261,7 +261,7 @@ dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/[
 # --------------------
 
 ecr-login() {
-	login=$(aws ecr get-login --region eu-west-1)
+	login=$(aws ecr get-login --region eu-west-1 | sed -e "s/-e [a-zA-Z0-9]* //g")
 	export aws_ecr_host=$(echo $login | grep -o "https.*")
 	eval $login
 	echo "aws_ecr_host: $aws_ecr_host"
@@ -276,6 +276,9 @@ load-aws-ps-ggs() {
 	export AWS_DEFAULT_PROFILE=ps-ggs
 	export AWS_DEFAULT_REGION=eu-west-1
 }
+
+alias load-aws-master-ggs-with-ecr-from-ps-ggs="load-aws-ps-ggs && ecr-login && load-aws-master-ggs"
+alias start-work="load-aws-master-ggs-with-ecr-from-ps-ggs"
 
 set-aws-region-eu-west-1() { export AWS_DEFAULT_REGION=eu-west-1 }
 set-aws-region-us-east-1 (){ export AWS_DEFAULT_REGION=us-east-1 }
