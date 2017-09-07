@@ -69,7 +69,7 @@ POWERLEVEL9K_CUSTOM_DOCKER_BACKGROUND="052"
 # --------------------
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/konstantin/.oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
 
 CASE_SENSITIVE="true"
 # HYPHEN_INSENSITIVE="true"
@@ -87,6 +87,7 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 export PATH="$HOME/bin:/usr/local/opt/gettext/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 export ZSH=$HOME/.oh-my-zsh
+export TERM="xterm-256color"
 
 # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins
 plugins=( \
@@ -261,30 +262,24 @@ dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/[
 # --------------------
 
 ecr-login() {
-	login=$(aws ecr get-login --region eu-west-1 | sed -e "s/-e [a-zA-Z0-9]* //g")
+	login=$(aws ecr get-login --region eu-west-1 --no-include-email)
 	export aws_ecr_host=$(echo $login | grep -o "https.*")
 	eval $login
 	echo "aws_ecr_host: $aws_ecr_host"
 }
 
-load-aws-master-ggs() { 
-	export AWS_DEFAULT_PROFILE=master-ggs
+load-aws-bf() { 
+	export AWS_DEFAULT_PROFILE=bf
 	export AWS_DEFAULT_REGION=eu-west-1
 }
 
-load-aws-ps-ggs() {
-	export AWS_DEFAULT_PROFILE=ps-ggs
+load-aws-ps() {
+	export AWS_DEFAULT_PROFILE=ps
 	export AWS_DEFAULT_REGION=eu-west-1
 }
 
-alias load-aws-master-ggs-with-ecr-from-ps-ggs="load-aws-ps-ggs && ecr-login && load-aws-master-ggs"
-alias start-work="load-aws-master-ggs-with-ecr-from-ps-ggs"
+alias start-work="load-aws-ps && ecr-login"
 
-set-aws-region-eu-west-1() { export AWS_DEFAULT_REGION=eu-west-1 }
-set-aws-region-us-east-1 (){ export AWS_DEFAULT_REGION=us-east-1 }
-set-aws-region-ap-southeast-1() { export AWS_DEFAULT_REGION=ap-southeast-1 }
-set-aws-region-us-west-2() { export AWS_DEFAULT_REGION=us-west-2 }
-set-aws-region-ps-test() { set-aws-region-us-west-2 }
 
 # --------------------
 #   GIT ALIASES
