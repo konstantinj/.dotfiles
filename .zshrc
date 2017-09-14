@@ -275,17 +275,12 @@ ecr-login() {
 	echo "aws_ecr_host: $aws_ecr_host"
 }
 
-load-aws-bf() { 
-	export AWS_DEFAULT_PROFILE=bf
-	export AWS_DEFAULT_REGION=eu-west-1
+load-aws() {
+	export AWS_DEFAULT_PROFILE=${1:-io}
+	export AWS_DEFAULT_REGION=${2:-eu-west-1}
 }
 
-load-aws-ps() {
-	export AWS_DEFAULT_PROFILE=ps
-	export AWS_DEFAULT_REGION=eu-west-1
-}
-
-alias start-work="load-aws-ps && ecr-login"
+alias start-work="load-aws && ecr-login"
 
 
 # --------------------
