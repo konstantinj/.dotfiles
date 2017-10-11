@@ -198,17 +198,9 @@ alias buuc='brew update && brew upgrade && brew cleanup'
 # --------------------
 
 # include docker version manager
-if [ -f $HOME/.dvm/dvm.sh ]; then
-    source $HOME/.dvm/dvm.sh
+if [ -f ~/.dvm/dvm.sh ]; then
+	source ~/.dvm/dvm.sh
 fi
-
-load-docker-qnap() {
-export DOCKER_TLS_VERIFY="1"
-export DOCKER_HOST="tcp://192.168.1.100:2376"
-export DOCKER_CERT_PATH="$HOME/.docker/qnap"
-export DOCKER_MACHINE_NAME=""
-dvm use 1.10.2
-}
 
 # Get latest container ID
 alias dl="docker ps -l -q"
