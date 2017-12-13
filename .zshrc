@@ -309,6 +309,15 @@ alias gstp='git stash pop'
 alias gstd='git stash drop'
 alias grsh='git reset --soft HEAD~${1:-1}'
 alias gpps='for ns in *; do echo "\t$ns" && cd $ns && for r in *; do echo "\t\t$r" && cd $r && git pull --recurse-submodules && cd ../; done; cd ../; done'
+alias gprs='git pull --recurse-submodules'
+# git show current tag
+alias gsct='git describe --exact-match --tags $(git log -n1 --pretty=%h)'
+# git show last commit
+alias gslc='git log -1 --pretty=%B'
+# git reset soft head - 1
+alias grsh1='git reset --soft HEAD~1'
+# get last commit msg, get last tag, reset head - 1, commit and tag again
+alias grlct='msg=$(gslc) && tag=$(gsct) && grsh1 && gac "$msg" && git tag -f $tag'
 
 # Show all alias related git
 galias() { alias | grep 'git' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
