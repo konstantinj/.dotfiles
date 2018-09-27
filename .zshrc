@@ -180,7 +180,7 @@ alias .4='cd ../../../../'
 alias .5='cd ../../../../..'
 
 # Colorize the ls output
-alias ls='ls -ahlG'
+alias ls='ls --color=auto -ahlG'
 
 # Reload .zshrc
 alias rz="source $HOME/.zshrc"
@@ -318,7 +318,7 @@ alias gslc='git log -1 --pretty=%B'
 alias grsh1='git reset --soft HEAD~1'
 # get last commit msg, get last tag, reset head - 1, commit and tag again
 alias grlct='msg=$(gslc) && tag=$(gsct) && grsh1 && gac "$msg" && git tag -f $tag'
-
+alias gcr='git clone --recursive'
 # Show all alias related git
 galias() { alias | grep 'git' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
 
