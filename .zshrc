@@ -6,18 +6,14 @@
 export DEFAULT_USER=`whoami`
 
 ZSH_THEME="powerlevel9k/powerlevel9k"
-
+# POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-untracked git-aheadbehind git-stash git-remotebranch git-tagname)
+POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-remotebranch git-tagname)
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status custom_docker custom_aws time)
 
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
 POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX=""
-
-# currently this must be set as string because it's compared against a string :/
-POWERLEVE9K_VCS_HIDE_TAGS="false"
-POWERLEVEL9K_SHOW_CHANGESET="false"
 
 POWERLEVEL9K_CONTEXT_DEFAULT_BACKGROUND="015"
 POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND="000"
@@ -91,7 +87,20 @@ HIST_STAMPS="yyyy-mm-dd"
 
 export EDITOR='vim'
 export SSH_KEY_PATH="~/.ssh/rsa_id"
-export PATH="$HOME/bin:/usr/local/opt/gettext/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
+
+export PATH="$HOME/bin"
+export PATH="$PATH:/usr/local/opt/coreutils/libexec/gnubin"
+export PATH="$PATH:/usr/local/opt/findutils/libexec/gnubin"
+export PATH="$PATH:/usr/local/opt/gnu-tar/libexec/gnubin"
+export PATH="$PATH:/usr/local/opt/gnu-sed/libexec/gnubin"
+export PATH="$PATH:/usr/local/opt/gnu-getopt/bin"
+export PATH="$PATH:/usr/local/bin"
+export PATH="$PATH:/usr/local/sbin"
+export PATH="$PATH:/usr/bin"
+export PATH="$PATH:/usr/sbin"
+export PATH="$PATH:/bin"
+export PATH="$PATH:/sbin"
+
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 export ZSH=$HOME/.oh-my-zsh
 export TERM="xterm-256color"
@@ -180,7 +189,7 @@ alias .4='cd ../../../../'
 alias .5='cd ../../../../..'
 
 # Colorize the ls output
-alias ls='ls --color=auto -ahlG'
+alias ls='ls -ahlG'
 
 # Reload .zshrc
 alias rz="source $HOME/.zshrc"
