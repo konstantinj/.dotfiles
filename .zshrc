@@ -7,9 +7,10 @@ export DEFAULT_USER=`whoami`
 
 ZSH_THEME="powerlevel9k/powerlevel9k"
 # POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-untracked git-aheadbehind git-stash git-remotebranch git-tagname)
-POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-remotebranch git-tagname)
+POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-tagname)
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status custom_docker custom_aws time)
+# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status custom_docker custom_aws time)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status custom_aws time)
 
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
@@ -93,13 +94,16 @@ export PATH="$PATH:/usr/local/opt/coreutils/libexec/gnubin"
 export PATH="$PATH:/usr/local/opt/findutils/libexec/gnubin"
 export PATH="$PATH:/usr/local/opt/gnu-tar/libexec/gnubin"
 export PATH="$PATH:/usr/local/opt/gnu-sed/libexec/gnubin"
+export PATH="$PATH:/usr/local/opt/grep/libexec/gnubin"
 export PATH="$PATH:/usr/local/opt/gnu-getopt/bin"
+export PATH="$PATH:/usr/local/opt/gettext/bin"
 export PATH="$PATH:/usr/local/bin"
 export PATH="$PATH:/usr/local/sbin"
 export PATH="$PATH:/usr/bin"
 export PATH="$PATH:/usr/sbin"
 export PATH="$PATH:/bin"
 export PATH="$PATH:/sbin"
+export PATH="$PATH:./node_modules/.bin"
 
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 export ZSH=$HOME/.oh-my-zsh
@@ -146,6 +150,10 @@ bindkey '\e\e[D' backward-word;
 bindkey "^[[1;2C" end-of-line;
 # cmd-left
 bindkey "^[[1;2D" beginning-of-line;
+
+bindkey "^R" history-incremental-pattern-search-backward
+bindkey "^P" vi-up-line-or-history
+bindkey "^N" vi-down-line-or-history
 
 # --------------------
 #   SYSTEM ALIASES
@@ -277,11 +285,11 @@ ecr-login() {
 }
 
 load-aws() {
-	export AWS_DEFAULT_PROFILE=${1:-io}
+	export AWS_DEFAULT_PROFILE=${1:-main}
 	export AWS_DEFAULT_REGION=${2:-eu-west-1}
 }
 
-alias start-work="load-aws && ecr-login"
+alias start-work="load-aws"
 
 
 # --------------------
@@ -352,3 +360,8 @@ alias dphpmetrics="$docker_prefix phpmetrics $@"
 alias dphpdox="$docker_prefix phpdox $@"
 alias dphpunit="$docker_prefix phpunit $@"
 alias dcodecept="$docker_prefix codecept $@"
+
+# Go development
+export GOPATH="${HOME}/.go"
+export GOROOT="/usr/local/opt/go/libexec"
+export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
