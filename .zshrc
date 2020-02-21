@@ -97,13 +97,16 @@ export PATH="$PATH:/usr/local/opt/gnu-sed/libexec/gnubin"
 export PATH="$PATH:/usr/local/opt/grep/libexec/gnubin"
 export PATH="$PATH:/usr/local/opt/gnu-getopt/bin"
 export PATH="$PATH:/usr/local/opt/gettext/bin"
+export PATH="$PATH:/usr/local/opt/mysql-client/bin"
 export PATH="$PATH:/usr/local/bin"
 export PATH="$PATH:/usr/local/sbin"
 export PATH="$PATH:/usr/bin"
 export PATH="$PATH:/usr/sbin"
 export PATH="$PATH:/bin"
 export PATH="$PATH:/sbin"
+export PATH="$PATH:~/.go/bin"
 export PATH="$PATH:./node_modules/.bin"
+export PATH="$PATH:/usr/local/texlive/2019/bin/x86_64-darwin"
 
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 export ZSH=$HOME/.oh-my-zsh
@@ -139,21 +142,21 @@ export LANG=en_US.UTF-8
 # --------------------
 
 # I need that for iterm2
-#bindkey -e;
-#bindkey '^[[1;5C' forward-word;
-#bindkey '^[[1;5D' backward-word;
+bindkey -e;
+bindkey '^[[1;5C' forward-word;
+bindkey '^[[1;5D' backward-word;
 # option-right
-#bindkey '\e\e[C' forward-word;
+bindkey '\e\e[C' forward-word;
 # option-left
-#bindkey '\e\e[D' backward-word;
+bindkey '\e\e[D' backward-word;
 # cmd-right
-#bindkey "^[[1;2C" end-of-line;
+bindkey "^[[1;2C" end-of-line;
 # cmd-left
-#bindkey "^[[1;2D" beginning-of-line;
+bindkey "^[[1;2D" beginning-of-line;
 
-#bindkey "^R" history-incremental-pattern-search-backward
-#bindkey "^P" vi-up-line-or-history
-#bindkey "^N" vi-down-line-or-history
+bindkey "^R" history-incremental-pattern-search-backward
+bindkey "^P" vi-up-line-or-history
+bindkey "^N" vi-down-line-or-history
 
 # --------------------
 #   SYSTEM ALIASES
