@@ -6,10 +6,9 @@
 export DEFAULT_USER=`whoami`
 
 ZSH_THEME="powerlevel9k/powerlevel9k"
-# POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-untracked git-aheadbehind git-stash git-remotebranch git-tagname)
-POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-tagname)
+
+#POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-tagname)
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
-# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status custom_docker custom_aws time)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status custom_aws time)
 
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
@@ -107,6 +106,7 @@ export PATH="$PATH:/sbin"
 export PATH="$PATH:~/.go/bin"
 export PATH="$PATH:./node_modules/.bin"
 export PATH="$PATH:/usr/local/texlive/2019/bin/x86_64-darwin"
+export PATH="$PATH:/usr/local/Cellar/libpq/12.2/bin"
 
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 export ZSH=$HOME/.oh-my-zsh
