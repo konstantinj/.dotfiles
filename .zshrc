@@ -281,13 +281,11 @@ dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/[
 # --------------------
 
 ecr-login() {
-	login=$(aws ecr get-login --region eu-west-1 --no-include-email)
-	export aws_ecr_host=$(echo $login | grep -o "https.*")
-	eval $login
-	echo "aws_ecr_host: $aws_ecr_host"
+	aws ecr get-login-password | docker login --username AWS --password-stdin 395059472966.dkr.ecr.eu-west-1.amazonaws.com
 }
 
 load-aws() {
+	export AWS_PROFILE=${1:-main}
 	export AWS_DEFAULT_PROFILE=${1:-main}
 	export AWS_DEFAULT_REGION=${2:-eu-west-1}
 }
