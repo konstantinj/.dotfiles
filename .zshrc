@@ -44,14 +44,11 @@ POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="007"
 POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="012"
 
 zsh_custom_aws() {
-    if [ -n "$AWS_DEFAULT_PROFILE" ]; then
-        echo -n "$AWS_DEFAULT_PROFILE";
+    if [ -n "$AWS_PROFILE" ]; then
+        echo -n "$AWS_PROFILE";
     fi
     if [ -n "$AWS_DEFAULT_REGION" ]; then
         echo -n "/$AWS_DEFAULT_REGION";
-    fi
-    if [ -n "$ENVIRONMENT" ]; then
-        echo -n "/$ENVIRONMENT";
     fi
 }
 
@@ -89,6 +86,7 @@ export EDITOR='vim'
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 export PATH="$HOME/bin"
+export PATH="$PATH:/usr/local/opt/curl/bin"
 export PATH="$PATH:/usr/local/opt/coreutils/libexec/gnubin"
 export PATH="$PATH:/usr/local/opt/findutils/libexec/gnubin"
 export PATH="$PATH:/usr/local/opt/gnu-tar/libexec/gnubin"
@@ -244,7 +242,7 @@ alias dex="docker exec -i -t"
 # Stop all containers
 dstop() { docker stop $(docker ps -a -q); }
 # Remove all exited containers
-drm() { docker rm -v $(docker ps --filter status=exited -aq); }
+function drm() { docker rm -v $(docker ps --filter status=exited -aq); }
 # Remove all containers
 drmf() { docker rm -v -f $(docker ps -aq); }
 # Remove all unused images
@@ -284,14 +282,11 @@ ecr-login() {
 	aws ecr get-login-password | docker login --username AWS --password-stdin 395059472966.dkr.ecr.eu-west-1.amazonaws.com
 }
 
-load-aws() {
+awssso() {
 	export AWS_PROFILE=${1:-main}
-	export AWS_DEFAULT_PROFILE=${1:-main}
-	export AWS_DEFAULT_REGION=${2:-eu-west-1}
+	export AWS_DEFAULT_REGION=${2:-eu-central-1}
+	aws sso login --profile ${AWS_PROFILE} && aws-sso-util login
 }
-
-alias start-work="load-aws"
-
 
 # --------------------
 #   GIT ALIASES
@@ -299,6 +294,7 @@ alias start-work="load-aws"
 
 alias gac='git add -A . && git commit -m' $1
 alias gpom='git push origin master'
+alias gpoma='git push origin main'
 alias gpod='git push origin develop'
 alias gtf='git tag -l | xargs git tag -d && git fetch'
 alias gt='git tag'
@@ -366,3 +362,6 @@ alias dcodecept="$docker_prefix codecept $@"
 export GOPATH="${HOME}/.go"
 export GOROOT="/usr/local/opt/go/libexec"
 export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
+
+alias ffmpeg_rotate='f(){ ffmpeg -i "$1" -c copy -metadata:s:v:0 rotate=180 "_$1"; unset -f f; }; f'
+
