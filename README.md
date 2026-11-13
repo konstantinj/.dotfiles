@@ -2,17 +2,31 @@
 
 ## Installation
 
-- install zsh for your distribution
-- sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-- git clone https://github.com/zsh-users/zsh-completions.git ~/.oh-my-zsh/custom/plugins/zsh-completions
-- git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-- git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
-- curl -sL https://download.getcarina.com/dvm/latest/install.sh | sh
-- git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-- git clone https://github.com/konstantinj/.dotfiles.git
-- cd .dotfiles && ./install.sh
-- vim +PluginInstall +qall
-- for a better look & feel you'll need to install https://github.com/powerline/fonts
+Clone the repository and run the installer:
+
+```zsh
+git clone https://github.com/konstantinj/.dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+./install.sh
+exec zsh
+```
+
+The installer is idempotent: existing Git checkouts are reused and already
+correct symlinks are left untouched. Existing non-symlink dotfiles are backed
+up before linking.
+
+To update the managed dependencies as well, run:
+
+```zsh
+UPDATE_DOTFILES_DEPS=1 ./install.sh
+```
+
+Machine-specific values and secrets belong in `~/.zshrc.local`. The installer
+creates that file once and never overwrites it. For example:
+
+```zsh
+export PULUMI_CONFIG_PASSPHRASE='your-local-value'
+```
 
 ## What's included?
 
@@ -21,21 +35,21 @@ When running install.sh your current files will be backed up and links to the fi
 
 ## Screenshots
 
-![image of powerlevel9k](https://github.com/konstantinj/.dotfiles/blob/master/screenshot-powerlevel9k.png)
-![image of vim](https://github.com/konstantinj/.dotfiles/blob/master/screenshot-vim.png)
+![image of powerlevel10k](https://github.com/konstantinj/.dotfiles/blob/main/screenshot-powerlevel9k.png)
+![image of vim](https://github.com/konstantinj/.dotfiles/blob/main/screenshot-vim.png)
 
 ### .zshrc
 
-Of yource I'm using [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) so you need to install it.
+Of course I'm using [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh) so you need to install it.
 
-I'm using the powerlevel9k theme and have added custom sections for docker and aws.
+I'm using the powerlevel10k theme and have added custom sections for docker and aws.
 I'm working quite heavily with docker, aws and php. Therefore my .zshrc is optimized for that.
 
-The docker section shows the currently used docker client/server-version and -ip. The aws section shows the currently used profile.
+The Docker aliases use the current `docker compose` command. The AWS section
+shows the currently used profile.
 
-Of course you need to load both first. I'm using ```ldm``` e.g. to connect to my docker-machine.
-Since I'm working with different docker servers I need the docker version manager.
-You need to install [docker version manager](https://github.com/getcarina/dvm) 
+The old Docker Machine/DVM integration is retained in the shell file for
+backwards compatibility, but it is optional and not installed by this script.
 
 ### .vimrc
 

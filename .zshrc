@@ -5,7 +5,7 @@
 
 export DEFAULT_USER=`whoami`
 
-ZSH_THEME="powerlevel9k/powerlevel9k"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 #POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-tagname)
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
@@ -83,42 +83,34 @@ CASE_SENSITIVE="true"
 HIST_STAMPS="yyyy-mm-dd"
 
 export EDITOR='vim'
-export SSH_KEY_PATH="~/.ssh/rsa_id"
+export SSH_KEY_PATH="$HOME/.ssh/rsa_id"
 
-export PATH="$HOME/bin"
-export PATH="$PATH:/usr/local/opt/curl/bin"
-export PATH="$PATH:/usr/local/opt/coreutils/libexec/gnubin"
-export PATH="$PATH:/usr/local/opt/findutils/libexec/gnubin"
-export PATH="$PATH:/usr/local/opt/gnu-tar/libexec/gnubin"
-export PATH="$PATH:/usr/local/opt/gnu-sed/libexec/gnubin"
-export PATH="$PATH:/usr/local/opt/grep/libexec/gnubin"
-export PATH="$PATH:/usr/local/opt/gnu-getopt/bin"
-export PATH="$PATH:/usr/local/opt/gettext/bin"
-export PATH="$PATH:/usr/local/opt/mysql-client/bin"
-export PATH="$PATH:/usr/local/bin"
-export PATH="$PATH:/usr/local/sbin"
-export PATH="$PATH:/usr/bin"
-export PATH="$PATH:/usr/sbin"
-export PATH="$PATH:/bin"
-export PATH="$PATH:/sbin"
-export PATH="$PATH:~/.go/bin"
-export PATH="$PATH:./node_modules/.bin"
-export PATH="$PATH:/usr/local/texlive/2019/bin/x86_64-darwin"
-export PATH="$PATH:/usr/local/Cellar/libpq/12.2/bin"
-
-export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+# Keep the inherited PATH and add common user/Homebrew paths without
+# duplicating entries. This works on Apple Silicon and Intel Macs.
+typeset -U path PATH
+if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+fi
+path=(
+    "$HOME/bin"
+    "$HOME/.go/bin"
+    "$HOME/.local/bin"
+    $path
+)
+export PATH
 export ZSH=$HOME/.oh-my-zsh
 export TERM="xterm-256color"
 
-# https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins
 plugins=( \
     aws \
     brew \
     docker \
-    docker-compose \
     git \
     git-extras \
-    github \
+    gh \
     ssh-agent \
     zsh-syntax-highlighting \
     zsh-completions \
@@ -265,11 +257,11 @@ dbu() {
 }
 
 alias ddu="disk-usage"
-alias dcb="docker-compose build"
-alias dcu="docker-compose up"
-alias dcs="docker-compose stop"
-alias dck="docker-compose kill"
-alias dcr="docker-compose rm -f"
+alias dcb="docker compose build"
+alias dcu="docker compose up"
+alias dcs="docker compose stop"
+alias dck="docker compose kill"
+alias dcr="docker compose rm -f"
 
 # Show all alias related docker
 dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
@@ -282,10 +274,15 @@ ecr-login() {
 	aws ecr get-login-password | docker login --username AWS --password-stdin 395059472966.dkr.ecr.eu-west-1.amazonaws.com
 }
 
-awssso() {
+awsprofile() {
 	export AWS_PROFILE=${1:-main}
 	export AWS_DEFAULT_REGION=${2:-eu-central-1}
-	aws sso login --profile ${AWS_PROFILE} && aws-sso-util login
+}
+
+awssso() {
+	awsprofile ${1} ${2}
+	aws sso login --profile ${AWS_PROFILE}
+	aws-sso-util login
 }
 
 # --------------------
@@ -293,7 +290,7 @@ awssso() {
 # --------------------
 
 alias gac='git add -A . && git commit -m' $1
-alias gpom='git push origin master'
+alias gpom='git push origin main'
 alias gpoma='git push origin main'
 alias gpod='git push origin develop'
 alias gtf='git tag -l | xargs git tag -d && git fetch'
@@ -307,7 +304,7 @@ alias gc='git commit'
 alias gcm='git commit -m'
 alias gco='git checkout'
 alias gcob='git checkout -b'
-alias gcom='git checkout master'
+alias gcom='git checkout main'
 alias gd='git diff'
 alias gda='git diff HEAD'
 alias gi='git init'
@@ -360,8 +357,17 @@ alias dcodecept="$docker_prefix codecept $@"
 
 # Go development
 export GOPATH="${HOME}/.go"
-export GOROOT="/usr/local/opt/go/libexec"
+if [[ -d "/opt/homebrew/opt/go/libexec" ]]; then
+    export GOROOT="/opt/homebrew/opt/go/libexec"
+elif [[ -d "/usr/local/opt/go/libexec" ]]; then
+    export GOROOT="/usr/local/opt/go/libexec"
+fi
 export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
 
 alias ffmpeg_rotate='f(){ ffmpeg -i "$1" -c copy -metadata:s:v:0 rotate=180 "_$1"; unset -f f; }; f'
+
+# Machine-specific values and secrets stay outside this repository.
+if [[ -f "$HOME/.zshrc.local" ]]; then
+    source "$HOME/.zshrc.local"
+fi
 
