@@ -57,7 +57,7 @@ link_dotfile .zshrc
 if [[ ! -e "$HOME/.zshrc.local" ]]; then
     cat > "$HOME/.zshrc.local" <<'EOF'
 # Machine-specific shell settings. This file is intentionally not tracked.
-# export PULUMI_CONFIG_PASSPHRASE='replace-me'
+export PULUMI_CONFIG_PASSPHRASE=''
 EOF
     chmod 600 "$HOME/.zshrc.local"
     print "Created $HOME/.zshrc.local; add local secrets there."

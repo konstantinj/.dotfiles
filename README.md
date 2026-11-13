@@ -25,8 +25,10 @@ Machine-specific values and secrets belong in `~/.zshrc.local`. The installer
 creates that file once and never overwrites it. For example:
 
 ```zsh
-export PULUMI_CONFIG_PASSPHRASE='your-local-value'
+export PULUMI_CONFIG_PASSPHRASE=''
 ```
+
+Replace the empty value locally when Pulumi requires a passphrase.
 
 ## What's included?
 

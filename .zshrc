@@ -367,6 +367,7 @@ export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
 alias ffmpeg_rotate='f(){ ffmpeg -i "$1" -c copy -metadata:s:v:0 rotate=180 "_$1"; unset -f f; }; f'
 
 # Machine-specific values and secrets stay outside this repository.
+export PULUMI_CONFIG_PASSPHRASE=''
 if [[ -f "$HOME/.zshrc.local" ]]; then
     source "$HOME/.zshrc.local"
 fi
